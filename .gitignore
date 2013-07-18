@@ -1,0 +1,5 @@
+*.suo
+*.log
+*.tmp.json
+*.tmp.js
+node_modules
