@@ -33,7 +33,9 @@ if (process.argv.length <= 2) {
             }
         }
     } else {
-        src.setupOnTheFly(!!flags["tmp"]);
+        if (flags["tmp"] === true)
+            flags["tmp"] = ".tmp";
+        src.setupOnTheFly(flags["tmp"]);
         process.argv.splice(1, 1);
         process.argv[1] = path.resolve(process.argv[1]);
         require("module").runMain();
