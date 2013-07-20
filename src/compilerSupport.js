@@ -12,6 +12,15 @@ var Vow = require("vow");
 // TODO: support other promises libs http://wiki.commonjs.org/wiki/Promises
 
 //#begin
+var aProto = Array.prototype;
+var bind = Function.prototype.bind || (function(oThis) {
+    var fn = this;
+    var args = aProto.slice.call(arguments, 1);
+    return function() {
+        fn.apply(oThis, args.concat(aProto.slice.call(arguments)));
+    };
+});
+
 function isPromise(smth) {
     return smth && typeof(smth.then) === "function";
 }
@@ -21,11 +30,11 @@ var TaskBuilder = function() {
     this.machine = null;
     this.handlers = null;
     this.promise = Vow.promise();
-    this.promise.abort = this.abort.bind(this);
+    this.promise.abort = bind.call(this.abort, this);
     this.exited = false;
 
-    this.onThen = this.moveNext.bind(this);
-    this.onError = this.setException.bind(this);
+    this.onThen = bind.call(this.moveNext, this);
+    this.onError = bind.call(this.setException, this);
     this.CONT = CONTINUE;
 };
 TaskBuilder.prototype.run = function(machine, handlers) {
