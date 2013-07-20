@@ -95,11 +95,13 @@ Preprocess.doFile = function(content, options) {
 
     var result = [];
     var compilerSupport = options.compilerSupport || "compilerSupport";
-    var csFile = options.csFile || "asjs/src/compilerSupport";
-    result.push(utils.codegen(
-        tmpl.require(compilerSupport, csFile),
-        { format: { indent: { style: '', base: 0 }, compact: true } }
-    ));
+    var csFile = ("csFile" in options) ? options.csFile : "asjs/src/compilerSupport";
+    if (csFile) {
+        result.push(utils.codegen(
+            tmpl.require(compilerSupport, csFile),
+            { format: { indent: { style: '', base: 0 }, compact: true } }
+        ));
+    }
     var lastInd = 0;
     var self = this;
     toReplace.forEach(function(item) {

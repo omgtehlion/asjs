@@ -19,13 +19,19 @@ for (var i = 2; i < process.argv.length;) {
 
 if (flags["in-place"])
     flags.preprocess = true;
+if (flags["raw"])
+    flags.preprocess = true;
 
 if (process.argv.length <= 2) {
     console.log(fs.readFileSync(__dirname + "/readme.txt", "utf-8"));
 } else {
     if (flags.preprocess || flags.pre) {
+        var options = {};
+        if (flags.raw)
+            options.csFile = null;
         for (var i = 2; i < process.argv.length; i++) {
-            var content = preprocess.doFile(process.argv[i], null, !!flags.bro);
+            var content = fs.readFileSync(process.argv[i], "utf-8");
+            content = preprocess.doFile(content, options) || content;
             if (flags["in-place"]) {
                 fs.writeFileSync(process.argv[i], content, "utf-8");
             } else {
