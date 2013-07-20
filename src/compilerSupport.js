@@ -11,6 +11,7 @@
 var Vow = require("vow");
 // TODO: support other promises libs http://wiki.commonjs.org/wiki/Promises
 
+//#begin
 function isPromise(smth) {
     return smth && typeof(smth.then) === "function";
 }
@@ -68,6 +69,6 @@ TaskBuilder.prototype.moveNext = function() {
         }
     }
 };
+//#end
 
-module.exports.CONTINUE = CONTINUE;
 module.exports.TaskBuilder = TaskBuilder;
