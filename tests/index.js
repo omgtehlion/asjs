@@ -160,10 +160,10 @@ function parseTest(f) {
 
 function reportTotals() {
     console.log("Totals:");
-    console.log("    " + bold(totals.tests) + " tests,",
-        color(totals.ok, GREEN) + " ok",
-        color(totals.changed, YELLOW) + " changed",
-        color(totals.failed, RED) + " failed"
+    console.log("    " + bold(totals.tests) + " tests" +
+        (", " + color(totals.ok, GREEN) + " ok") +
+        (totals.changed ? ", " + color(totals.changed, YELLOW) + " changed" : "") +
+        (totals.failed ? ", " + color(totals.failed, RED) + " failed" : "")
     );
 }
 
