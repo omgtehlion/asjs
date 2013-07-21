@@ -8,16 +8,16 @@
     return promise;
 }
 
-var btn = document.getElementById("btn-xhr");
-var textarea = document.getElementById("text-2");
+var btnXhr = document.getElementById("btn-xhr");
+var text2 = document.getElementById("text-2");
 
-btn.onclick = async(function(e) {
+btnXhr.onclick = async(function(e) {
     try {
-        textarea.value = await(deferredXhr("./README.md")).responseText;
+        text2.value = await(deferredXhr("./README.md")).responseText;
     } catch(ex) {
-        textarea.value = "ERROR: " + ex;
+        text2.value = "ERROR: " + ex;
         if (/^file/.test(location.protocol))
-            textarea.value += "\n\nPlease use a local server to test this example.\n" +
+            text2.value += "\n\nPlease use a local server to test this example.\n" +
                 "npm install http-server might be a good bet.";
     }
 });

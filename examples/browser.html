@@ -20,5 +20,31 @@
             <textarea id="text-2" style="width: 90%; height: 250px"></textarea>
         </div>
         <script src="4-brow-xhr.out.js" type="text/javascript"></script>
+
+        <div style="position: relative; border-bottom: solid 1px #999; width: 100%">
+            <b>5. Confirm</b><br />
+            <label><input type="checkbox" id="chk-custom-confirm" /> use custom confirm dialog</label><br />
+            <button id="btn-confirm">do some action</button>
+            <div id="confirm-result"></div>
+        </div>
+        <div id="confirm-wrap" style="display: none; font-family: 'Segoe UI Web Light', 'Segoe UI Light', 'Helvetica Neue Ultra Light', 'Helvetica Neue', Helvetica, Sans-Serif;">
+            <style type="text/css">
+                .nbtn {
+                    font-family: inherit; border: solid 1px #808080; background: #e2e2e2; padding: 4px 12px;
+                }
+                .nbtn:hover {
+                    border-color: #007bba; background: #95dafc;
+                }
+            </style>
+            <div style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: #000; opacity: .3; filter: alpha(opacity=30);"></div>
+            <div style="position: absolute; left: 50%; top: 50%; width: 360px; padding: 0 10px 10px;
+                    margin-left: -180px; margin-top: -50px; background: #fff; border: solid 2px #808080">
+                <div style="width: 100%; background: #007bba; color: #fff; font-weight: bold; padding: 5px 10px; margin: 0 -10px 10px">Confirm</div>
+                <div id="confirm-txt"></div><br />
+                <button id="confirm-ok" class="nbtn">OK</button>
+                <button id="confirm-cancel" class="nbtn">Cancel</button>
+            </div>
+        </div>
+        <script src="5-brow-confirm.out.js" type="text/javascript"></script>
     </body>
 </html>
