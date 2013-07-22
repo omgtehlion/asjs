@@ -8,10 +8,10 @@
     return promise;
 }
 
-var btn = document.getElementById("btn-xhr");
-var textarea = document.getElementById("text-2");
+var btnXhr = document.getElementById("btn-xhr");
+var text2 = document.getElementById("text-2");
 
-btn.onclick = function (e) {
+btnXhr.onclick = function (e) {
     var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
     var $1, $2;
     return __builder.run(function () {
@@ -26,9 +26,9 @@ btn.onclick = function (e) {
             }
         case 2: {
                 var ex = __ex;
-                textarea.value = "ERROR: " + ex;
+                text2.value = "ERROR: " + ex;
                 if (/^file/.test(location.protocol))
-                    textarea.value += "\n\nPlease use a local server to test this example.\n" + "npm install http-server might be a good bet.";
+                    text2.value += "\n\nPlease use a local server to test this example.\n" + "npm install http-server might be a good bet.";
                 __state = 3;
                 return __continue;
             }
@@ -40,7 +40,7 @@ btn.onclick = function (e) {
         case 4: {
                 $1 = __awaiter.valueOf();
                 $2 = $1.responseText;
-                textarea.value = $2;
+                text2.value = $2;
                 __state = 3;
                 return __continue;
             }
