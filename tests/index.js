@@ -17,7 +17,8 @@ function color(str, color) {
     return "\033[" + color + "m" + str + "\033[39m";
 }
 function bold(str) {
-    return "\033[1m" + str + "\033[21m";
+    // NOTE: should end with [21m, but it seems to screw up some terminals
+    return "\033[1m" + str + "\033[22m";
 }
 function report(status) {
     if (status === "ok")
