@@ -12,7 +12,7 @@ function pad(str, sz) {
     return str + spaces.substr(0, sz - str.length);
 }
 // see: http://misc.flogisoft.com/bash/tip_colors_and_formatting
-var RED = 91, GREEN = 92, YELLOW = 93;
+var RED = 91, GREEN = 32, YELLOW = 93;
 function color(str, color) {
     return "\033[" + color + "m" + str + "\033[39m";
 }
