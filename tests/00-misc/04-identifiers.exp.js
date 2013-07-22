@@ -9,10 +9,7 @@ var main = function (arg1, arg2) {
     return __builder1.run(function () {
         switch (__state1) {
         case 0: {
-                __builder = 1;
-                __state = 2;
-                __awaiter = 3;
-                __continue = 4;
+                __builder = 1, __state = 2, __awaiter = 3, __continue = 4;
                 local1 = global + "|" + globalVar + "|" + arg1;
                 local1 += "|" + __arguments[1];
                 __state1 = 1;

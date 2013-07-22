@@ -70,6 +70,9 @@ Tmpl.break = function(label) {
 Tmpl.block = function(statements) {
     return { type: "BlockStatement", body: statements };
 };
+Tmpl.sequence = function(expressions) {
+    return { type: "SequenceExpression", expressions: expressions };
+};
 Tmpl.func = function(params, statements) {
     params = params.map(function(name) { return { type: "Identifier", name: name }; });
     return { type: "FunctionExpression", id: null, params: params, defaults: [], body: this.block(statements) };

@@ -40,7 +40,8 @@ Scope.prototype.process = function(ast, replacing) {
             if (node.type === "VariableDeclaration") {
                 if (node.kind !== "var")
                     throw "not implemented";
-                return self.processVars(node.declarations, replacing);
+                var forInit = parent.type === "ForStatement" && node === parent.init;
+                return self.processVars(node.declarations, replacing, forInit);
             }
         },
     });
@@ -108,7 +109,7 @@ Scope.prototype.addParams = function(params) {
     }
 };
 /** @private */
-Scope.prototype.processVars = function(declarations, replacing) {
+Scope.prototype.processVars = function(declarations, replacing, forInit) {
     var initializers = [];
     for (var i = 0; i < declarations.length; i++) {
         var decl = declarations[i];
@@ -123,9 +124,13 @@ Scope.prototype.processVars = function(declarations, replacing) {
     if (!initializers.length)
         return null;
     initializers = initializers.map(function(decl) {
-        return tmpl.assignStmt({ type: "Identifier", name: decl.id.name }, decl.init);
+        return tmpl.assign({ type: "Identifier", name: decl.id.name }, decl.init);
     });
-    return (initializers.length > 1) ? tmpl.block(initializers) : initializers[0];
+    var result = (initializers.length > 1) ? tmpl.sequence(initializers) : initializers[0];
+    // special case for `init` part of ForStatement
+    if (!forInit)
+        result = tmpl.expression(result);
+    return result;
 };
 /** @private */
 Scope.prototype.genName = function(hint) {
