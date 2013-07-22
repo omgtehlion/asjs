@@ -106,6 +106,8 @@ Tmpl.returnContinue = function(scope) {
 };
 Tmpl.fulfill = function(scope, value) {
     var builderRet = this.member(scope.getSpec("builder"), "ret");
+    if (value && value.type === "Identifier" && value.name === "undefined")
+        value = undefined;
     return this.expression(this.call(builderRet, value ? [value] : []));
 };
 

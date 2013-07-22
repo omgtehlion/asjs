@@ -172,8 +172,12 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
         case "ReturnStatement":
             // adding an empty node, just a safety measure
             var thisNode = cfg.newNode(null);
-            this.traverseReplacing(node, "argument", thisNode);
-            thisNode.returns = node.argument;
+            if (node.argument) {
+                this.traverseReplacing(node, "argument", thisNode);
+                thisNode.returns = node.argument;
+            } else {
+                thisNode.returns = { type: "Identifier", name: "undefined" };
+            }
             cfg.connect(thisNode, this.currNode);
             this.currNode = null;
             return false;
