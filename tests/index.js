@@ -99,38 +99,38 @@ function runTest(dir, f, callback) {
     }
     
     var child = exec("node " + f.replace(/\.js$/, ".tmp.js"), { cwd: dir }, function(error, stdout, stderr) {
+        var compare = function(expected, got) {
+            var isRegex = expected instanceof RegExp;
+            var m = isRegex ? expected.exec(got.trim()) : (expected === got.trim());
+            if (!m) {
+                report("fail");
+                var exp = isRegex ? "/" + expected.source + "/" : JSON.stringify(expected);
+                console.log(">expected: " + exp);
+                console.log(">got: " + JSON.stringify(got));
+                return false;
+            }
+            if (isRegex && test.params.assert && !test.params.assert(m)) {
+                report("fail");
+                console.log(">assertion failed, m=" + JSON.stringify(m));
+                return false;
+            }
+            return true;
+        };
+
         if ("stdout" in test.params) {
-            if (test.params.stdout !== stdout.trim()) {
-                report("fail");
-                console.log(">expected " + JSON.stringify(test.params.stdout));
-                console.log(">got " + JSON.stringify(stdout));
+            if (!compare(test.params.stdout, stdout))
                 return callback();
-            }
         } else if ("stderr" in test.params) {
-            if (test.params.stderr !== stderr.trim()) {
-                report("fail");
-                console.log(">expected " + JSON.stringify(test.params.stderr));
-                console.log(">got " + JSON.stringify(stderr));
+            if (!compare(test.params.stderr, stderr))
                 return callback();
-            }
         } else if ("error" in test.params) {
-            if (test.params.error != error.code) {
+            var err = test.params.error;
+            if (!Array.isArray(err))
+                err = [err];
+            if (err.indexOf(error.code) === -1) {
                 report("fail");
                 console.log(">expected error " + test.params.error);
                 console.log(">got error " + error.code);
-                return callback();
-            }
-        } else if ("parse" in test.params) {
-            var m = test.params.parse.exec(stdout.trim());
-            if (!m) {
-                report("fail");
-                console.log(">expected /" + test.params.parse.source + "/");
-                console.log(">got " + JSON.stringify(stdout));
-                return callback();
-            } 
-            if (!test.params.assert(m)) {
-                report("fail");
-                console.log(">assertion failed, m=" + JSON.stringify(m));
                 return callback();
             }
         } else {

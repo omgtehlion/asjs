@@ -1,6 +1,6 @@
 ﻿/// {
 ///     description: 'Should throw if cannot transform',
-///     error: 8
+///     error: [ 1, 8 ]
 /// }
 
 var main = async(function(fileName) {

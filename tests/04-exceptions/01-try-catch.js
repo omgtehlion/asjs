@@ -1,6 +1,6 @@
 ﻿/// {
 ///     description: 'Try-catch should catch rejected promise',
-///     stdout: 'result: ex caught: Error: EISDIR, read'
+///     stdout: /result: ex caught: Error: [A-Z]+, read/
 /// }
 
 var fs = require("fs");

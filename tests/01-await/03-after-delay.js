@@ -1,8 +1,8 @@
 ﻿/// {
 ///     description: 'Arguments should be evaluated in correct order',
-///     parse: /promiseMe 0 (\d+)\
-///             promiseMe 2 (\d+)\
-///             main: 0 1 2/,
+///     stdout: /promiseMe 0 (\d+)\
+///              promiseMe 2 (\d+)\
+///              main: 0 1 2/,
 ///     assert: function(m) { return (m[2] - m[1]) >= 30; }
 /// }
 
