@@ -1,4 +1,4 @@
-var compilerSupport=require('..\\src\\compilerSupport.js');﻿var exec = require("child_process").exec;
+var compilerSupport=require('../src/compilerSupport.js');var exec = require("child_process").exec;
 var fs = require("fs");
 var path = require("path");
 var preprocess = require("../src/preprocess");
