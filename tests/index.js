@@ -104,7 +104,7 @@ var runSection = function (root, dir) {
         case 3: {
                 $1 = __awaiter.valueOf();
                 test = $1;
-                process.stdout.write("  " + pad(test.description || "", 60));
+                process.stdout.write("  " + pad(test.params.description || "", 60));
                 report(test.status || "???");
                 if (test.details)
                     test.details.forEach(function (line) {

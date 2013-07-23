@@ -56,7 +56,7 @@ var runSection = async(function(root, dir) {
         totals.tests++;
         process.stdout.write("    " + pad(files[i].replace(/\.js$/, ""), 25));
         var test = await(runTest(dir, files[i]));
-        process.stdout.write("  " + pad(test.description || "", 60));
+        process.stdout.write("  " + pad(test.params.description || "", 60));
         report(test.status || "???");
         if (test.details)
             test.details.forEach(function(line) { console.log("> " + line); });
