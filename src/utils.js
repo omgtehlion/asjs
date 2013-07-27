@@ -8,9 +8,9 @@
 // See license.txt file for the full text of the license.
 //
 
-var esprima = require("../3rd-party/esprima");
-var estraverse = require("../3rd-party/estraverse");
-var escodegen = require("../3rd-party/escodegen");
+var esprima = require("esprima");
+var estraverse = require("estraverse");
+var escodegen = require("escodegen");
 
 // Exceptions
 exports.ARE_YOU_MAD = "this usage of await() is not supported, and unlikely to be";
