@@ -37,7 +37,12 @@ var main = function () {
             throw 'Internal error: encountered wrong state';
         }
     }, function (ex) {
-        var handler = [, 2, , 2][__state];
+        var handler = [
+                ,
+                2,
+                ,
+                2
+            ][__state];
         if (handler !== undefined) {
             __state = handler;
             __ex = ex;

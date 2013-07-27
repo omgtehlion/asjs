@@ -15,7 +15,11 @@ var main = function () {
             }
         case 2: {
                 $2 = __awaiter.valueOf();
-                $3 = [$1, 2, $2];
+                $3 = [
+                    $1,
+                    2,
+                    $2
+                ];
                 console.log("main", $3);
                 __state = -1;
                 __builder.ret();
