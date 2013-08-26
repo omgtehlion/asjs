@@ -21,7 +21,7 @@ var Preprocess = {};
 
 Preprocess._doFile = function(fileName, tmpExt, bro) {
     var content = fs.readFileSync(fileName, "utf-8");
-    var parsed = utils.parse(content, { raw: true, range: true });
+    var parsed = utils.parse(content, { raw: true, range: true, ranges: true });
 
     var toReplace = [];
 
@@ -77,7 +77,7 @@ Preprocess._doFile = function(fileName, tmpExt, bro) {
 
 Preprocess.doFile = function(content, options) {
     options = options || {};
-    var parsed = utils.parse(content, { raw: true, range: true });
+    var parsed = utils.parse(content, { raw: true, range: true, ranges: true });
 
     var toReplace = [];
 

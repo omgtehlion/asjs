@@ -184,10 +184,12 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
         case "TryStatement":
             if (node.guardedHandlers.length !== 0)
                 throw ARE_YOU_MAD;
-            if (node.handlers.length !== 1)
+            if (node.handlers && node.handlers.length !== 1)
                 throw ARE_YOU_MAD;
             if (node.finalizer)
                 throw COME_LATER;
+
+            var handlerAst = node.handler || node.handlers[0];
 
             var exitNode = cfg.newNode(null);
             var entryNode = this.currNode;
@@ -195,8 +197,8 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
             // process handler
             var handler = cfg.newNode(null);
             this.currNode = handler;
-            this.remapParam(node.handlers[0]);
-            this.traverse(node.handlers[0].body);
+            this.remapParam(handlerAst);
+            this.traverse(handlerAst.body);
             cfg.connect(exitNode, this.currNode);
 
             // process body

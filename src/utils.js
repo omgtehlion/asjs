@@ -64,7 +64,7 @@ exports.WorkingSet = function(ast) {
 };
 
 // reimport libs
-exports.parse = esprima.parse;
+exports.parse = require("../3rd-party/acorn").parse;
 exports.traverse = estraverse.traverse;
 exports.replace = estraverse.replace;
 exports.Break = estraverse.VisitorOption.Break;
