@@ -179,22 +179,34 @@ var runTest = function (dir, f) {
                 return __continue;
             }
         case 9: {
-                compare = function (expected, got) {
-                    var isRegex = expected instanceof RegExp;
-                    var m = isRegex ? expected.exec(got.trim()) : expected === got.trim();
-                    if (!m) {
+                if (test.params.exact) {
+                    if (expected === processed) {
+                        test.status = "ok";
+                        fs.unlinkSync(fname.replace(/\.js$/, ".tmp.js"));
+                    } else {
                         test.status = "fail";
-                        var exp = isRegex ? "/" + expected.source + "/" : JSON.stringify(expected);
-                        test.details = ["expected: " + exp, "got: " + JSON.stringify(got)];
-                    } else if (isRegex && test.params.assert && !test.params.assert(m)) {
-                        test.status = "fail";
-                        test.details = ["assertion failed, m=" + JSON.stringify(m)];
                     }
-                };
-                __state = 10;
-                return __awaiter = execTest(f, dir);
+                    __state = -1;
+                    __builder.ret(test);
+                    break;
+                } else {
+                    compare = function (expected, got) {
+                        var isRegex = expected instanceof RegExp;
+                        var m = isRegex ? expected.exec(got.trim()) : expected === got.trim();
+                        if (!m) {
+                            test.status = "fail";
+                            var exp = isRegex ? "/" + expected.source + "/" : JSON.stringify(expected);
+                            test.details = ["expected: " + exp, "got: " + JSON.stringify(got)];
+                        } else if (isRegex && test.params.assert && !test.params.assert(m)) {
+                            test.status = "fail";
+                            test.details = ["assertion failed, m=" + JSON.stringify(m)];
+                        }
+                    };
+                    __state = 12;
+                    return __awaiter = execTest(f, dir);
+                }
             }
-        case 10: {
+        case 12: {
                 $2 = __awaiter.valueOf();
                 run = $2;
                 if ("stdout" in test.params) {
@@ -261,3 +273,4 @@ var parseTest = function(f) {
 }
 
 runTests(__dirname).then(null, console.error);
+

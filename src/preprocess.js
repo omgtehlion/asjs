@@ -77,6 +77,11 @@ Preprocess._doFile = function(fileName, tmpExt, bro) {
 
 Preprocess.doFile = function(content, options) {
     options = options || {};
+
+    // Strip UTF-8 BOM
+    if (content.charAt(0) === "\uFEFF")
+        content = content.slice(1);
+
     var parsed = utils.parse(content, { raw: true, range: true });
 
     var toReplace = [];
@@ -94,6 +99,8 @@ Preprocess.doFile = function(content, options) {
         return null;
 
     var result = [];
+    var lastInd = 0;
+
     var compilerSupport = options.compilerSupport || "compilerSupport";
     var csFile = ("csFile" in options) ? options.csFile : "asjs/src/compilerSupport";
     if (csFile) {
@@ -102,7 +109,7 @@ Preprocess.doFile = function(content, options) {
             { format: { indent: { style: '', base: 0 }, compact: true } }
         ));
     }
-    var lastInd = 0;
+
     var self = this;
     toReplace.forEach(function(item) {
         var ast = self.doFunction(item.ast, compilerSupport);

@@ -83,6 +83,16 @@ var runTest = async(function(dir, f) {
         return test;
     }
 
+    if (test.params.exact) {
+        if (expected === processed) {
+            test.status = "ok";
+            fs.unlinkSync(fname.replace(/\.js$/, ".tmp.js"));
+        } else {
+            test.status = "fail";
+        }
+        return test;
+    }
+
     var compare = function(expected, got) {
         var isRegex = expected instanceof RegExp;
         var m = isRegex ? expected.exec(got.trim()) : (expected === got.trim());
