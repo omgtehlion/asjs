@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var preprocess = require("./src/preprocess");
+var asjs = require("./src");
 var fs = require("fs");
 var path = require("path");
 var src = require("./src");
@@ -31,7 +31,7 @@ if (process.argv.length <= 2) {
             options.csFile = null;
         for (var i = 2; i < process.argv.length; i++) {
             var content = fs.readFileSync(process.argv[i], "utf-8");
-            content = preprocess.doFile(content, options) || content;
+            content = asjs.processSource(content, options) || content;
             if (flags["in-place"]) {
                 fs.writeFileSync(process.argv[i], content, "utf-8");
             } else {

@@ -1,7 +1,7 @@
 var compilerSupport=require('../src/compilerSupport.js');var exec = require("child_process").exec;
 var fs = require("fs");
 var path = require("path");
-var preprocess = require("../src/preprocess");
+var asjs = require("../src");
 var Vow = require("vow");
 
 // *** String tools ***
@@ -150,7 +150,7 @@ var runTest = function (dir, f) {
                 return __continue;
             }
         case 4: {
-                processed = preprocess.doFile(test.src, { csFile: "../../src/compilerSupport" });
+                processed = asjs.processSource(test.src, { csFile: "../../src/compilerSupport" });
                 fs.writeFileSync(fname.replace(/\.js$/, ".tmp.js"), processed, "utf-8");
                 __state = 6;
                 return __continue;
@@ -273,4 +273,3 @@ var parseTest = function(f) {
 }
 
 runTests(__dirname).then(null, console.error);
-

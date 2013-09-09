@@ -1,7 +1,7 @@
 ﻿var exec = require("child_process").exec;
 var fs = require("fs");
 var path = require("path");
-var preprocess = require("../src/preprocess");
+var asjs = require("../src");
 var Vow = require("vow");
 
 // *** String tools ***
@@ -72,7 +72,7 @@ var runTest = async(function(dir, f) {
         return { status: "corrupt", details: [ ex ] };
     }
     try {
-        var processed = preprocess.doFile(test.src, { csFile: "../../src/compilerSupport" });
+        var processed = asjs.processSource(test.src, { csFile: "../../src/compilerSupport" });
         fs.writeFileSync(fname.replace(/\.js$/, ".tmp.js"), processed, "utf-8");
         try {
             var expected = fs.readFileSync(fname.replace(/\.js$/, ".exp.js"), "utf-8");
