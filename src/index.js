@@ -26,7 +26,11 @@ module.exports.setupOnTheFly = function(tmpExt) {
 
     require.extensions[".js"] = function(module, filename) {
         var src = fs.readFileSync(filename, "utf-8");
-        var content = processSource(src, { csFile: path.relative(path.dirname(filename), csFile) });
+        // fix windows-style path names
+        var relCsFile = path.relative(path.dirname(filename), csFile);
+        if (path.sep !== "/")
+            relCsFile = relCsFile.split(path.sep).join("/");
+        var content = processSource(src, { csFile: relCsFile });
         if (content) {
             if (tmpExt)
                 fs.writeFileSync(filename.replace(/\.[^.]+$/, tmpExt), content, "utf-8");
