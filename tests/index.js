@@ -78,10 +78,13 @@ var runSection = function (root, dir) {
                 console.log("[ " + dir + " ]");
                 dir = path.join(root, dir);
                 files = fs.readdirSync(dir).filter(function (f) {
-                    return /^\d+-/.test(f) && /\.js$/.test(f);
-                });
-                files = files.filter(function (f) {
-                    return !/(\.tmp|\.out|\.exp)\.js$/.test(f);
+                    if (!/^\d+-/.test(f) || !/\.js$/.test(f))
+                        return false;
+                    if (/(\.tmp|\.out|\.exp)\.js$/.test(f))
+                        return false;
+                    if (process.argv.length > 3 && f.lastIndexOf(process.argv[3], 0) !== 0)
+                        return false;
+                    return true;
                 });
                 files.sort();
                 i = 0;
