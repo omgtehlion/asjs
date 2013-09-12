@@ -67,14 +67,18 @@ TaskBuilder.prototype.moveNext = function() {
             result = this.machine();
         } catch (ex) {
             this.setException(ex);
-            return;
+            break;
         }
         if (isPromise(result)) {
-            result.then(this.onThen, this.onError);
-            return;
+            if (result._isFulfilled) {
+                result = CONTINUE;
+            } else {
+                result.then(this.onThen, this.onError);
+                break;
+            }
         } else if (result !== CONTINUE && !this.exited) {
             this.setException("Awaited value is not a promise: " + result);
-            return;
+            break;
         }
     }
 };
