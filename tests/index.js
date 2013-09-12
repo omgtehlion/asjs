@@ -27,7 +27,7 @@ var report = function(status) {
 }
 
 var runTests = function (rootDir) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var sections, i;
     return __builder.run(function () {
         switch (__state) {
@@ -48,7 +48,7 @@ var runTests = function (rootDir) {
         case 1: {
                 if (i < sections.length) {
                     __state = 3;
-                    return __awaiter = runSection(rootDir, sections[i]);
+                    return runSection(rootDir, sections[i]);
                 } else {
                     console.log("Totals:");
                     console.log("    " + bold(totals.tests) + " tests" + (", " + color(totals.ok, GREEN) + " ok") + (totals.changed ? ", " + color(totals.changed, YELLOW) + " changed" : "") + (totals.failed ? ", " + color(totals.failed, RED) + " failed" : ""));
@@ -69,7 +69,7 @@ var runTests = function (rootDir) {
 }
 
 var runSection = function (root, dir) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1;
     var files, i, test;
     return __builder.run(function () {
@@ -96,7 +96,7 @@ var runSection = function (root, dir) {
                     totals.tests++;
                     process.stdout.write("    " + pad(files[i].replace(/\.js$/, ""), 25));
                     __state = 3;
-                    return __awaiter = runTest(dir, files[i]);
+                    return runTest(dir, files[i]);
                 } else {
                     console.log();
                     __state = -1;
@@ -105,7 +105,7 @@ var runSection = function (root, dir) {
                 }
             }
         case 3: {
-                $1 = __awaiter.valueOf();
+                $1 = __builder.val;
                 test = $1;
                 process.stdout.write("  " + pad(test.params.description || "", 60));
                 report(test.status || "???");
@@ -124,7 +124,7 @@ var runSection = function (root, dir) {
 }
 
 var runTest = function (dir, f) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1, $2;
     var fname, test, processed, expected, compare, run, err;
     return __builder.run(function () {
@@ -206,11 +206,11 @@ var runTest = function (dir, f) {
                         }
                     };
                     __state = 12;
-                    return __awaiter = execTest(f, dir);
+                    return execTest(f, dir);
                 }
             }
         case 12: {
-                $2 = __awaiter.valueOf();
+                $2 = __builder.val;
                 run = $2;
                 if ("stdout" in test.params) {
                     compare(test.params.stdout, run.stdout);

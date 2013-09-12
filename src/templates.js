@@ -98,11 +98,8 @@ Tmpl.require = function(localName, fileName) {
 Tmpl.setState = function(scope, state) {
     return this.assignStmt({ type: "Identifier", name: scope.getSpec("state") }, this.number(state));
 };
-Tmpl.awaiterToTmpVar = function(scope, tmpVar) {
-    return this.assignStmt(tmpVar, this.call(this.member(scope.getSpec("awaiter"), "valueOf")));
-};
-Tmpl.returnAwaiter = function(scope, expr) {
-    return this.return(this.assign({ type: "Identifier", name: scope.getSpec("awaiter") }, expr));
+Tmpl.awaitedToTmpVar = function(scope, tmpVar) {
+    return this.assignStmt(tmpVar, this.member(scope.getSpec("builder"), "val"));
 };
 Tmpl.returnContinue = function(scope) {
     return this.return({ type: "Identifier", name: scope.getSpec("continue") });

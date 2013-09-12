@@ -4,16 +4,16 @@ var thisShouldBeCalled = function(x) { console.log("thisShouldBeCalled");  retur
 var thisShouldnt = function(x) { console.error("ERROR: thisShouldnt"); return 0; };
 
 var main = function () {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1, $2, $3;
     return __builder.run(function () {
         switch (__state) {
         case 0: {
                 __state = 1;
-                return __awaiter = Vow.fulfill(true);
+                return Vow.fulfill(true);
             }
         case 1: {
-                $1 = __awaiter.valueOf();
+                $1 = __builder.val;
                 if ($1) {
                     thisShouldBeCalled();
                     __state = 3;
@@ -26,10 +26,10 @@ var main = function () {
             }
         case 3: {
                 __state = 4;
-                return __awaiter = Vow.fulfill(false);
+                return Vow.fulfill(false);
             }
         case 4: {
-                $2 = __awaiter.valueOf();
+                $2 = __builder.val;
                 if ($2) {
                     $3 = thisShouldnt();
                     __state = 6;

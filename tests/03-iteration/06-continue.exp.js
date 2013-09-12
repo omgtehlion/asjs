@@ -1,7 +1,7 @@
 var compilerSupport=require('../../src/compilerSupport');var Vow = require("vow");
 
 var main = function () {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1, $2, $3;
     var i, j;
     return __builder.run(function () {
@@ -31,7 +31,7 @@ var main = function () {
                     } else {
                         $1 = "i = " + i + ", j = ";
                         __state = 7;
-                        return __awaiter = Vow.fulfill(j);
+                        return Vow.fulfill(j);
                     }
                 } else {
                     __state = 5;
@@ -44,7 +44,7 @@ var main = function () {
                 return __continue;
             }
         case 7: {
-                $2 = __awaiter.valueOf();
+                $2 = __builder.val;
                 $3 = $1 + $2;
                 console.log($3);
                 __state = 8;

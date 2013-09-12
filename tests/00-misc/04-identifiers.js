@@ -8,7 +8,7 @@ var globalVar = "globalVar";
 
 var main = async(function(arg1, arg2) {
     // check that builtin identifiers are not corrupted:
-    var __builder = 1, __state = 2, __awaiter = 3, __continue = 4;
+    var __builder = 1, __state = 2, __continue = 4;
     // add some locals
     var local0, local1 = global + "|" + globalVar + "|" + arg1;
     // reference `arguments`

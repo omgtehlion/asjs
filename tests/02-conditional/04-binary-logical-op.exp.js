@@ -10,7 +10,7 @@ var thisShouldnt = function(x) {
 };
 
 var main = function () {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1, $2, $3, $4, $5;
     return __builder.run(function () {
         switch (__state) {
@@ -21,7 +21,7 @@ var main = function () {
                     return __continue;
                 } else {
                     __state = 16;
-                    return __awaiter = thisShouldBeCalled(1);
+                    return thisShouldBeCalled(1);
                 }
             }
         case 1: {
@@ -29,14 +29,14 @@ var main = function () {
                 $2 = 1;
                 if ($2) {
                     __state = 3;
-                    return __awaiter = thisShouldBeCalled(2);
+                    return thisShouldBeCalled(2);
                 } else {
                     __state = 4;
                     return __continue;
                 }
             }
         case 3: {
-                $2 = __awaiter.valueOf();
+                $2 = __builder.val;
                 __state = 4;
                 return __continue;
             }
@@ -48,36 +48,36 @@ var main = function () {
                     return __continue;
                 } else {
                     __state = 14;
-                    return __awaiter = thisShouldnt(3);
+                    return thisShouldnt(3);
                 }
             }
         case 5: {
                 $4 = 0;
                 if ($4) {
                     __state = 7;
-                    return __awaiter = thisShouldnt(4);
+                    return thisShouldnt(4);
                 } else {
                     __state = 8;
                     return __continue;
                 }
             }
         case 7: {
-                $4 = __awaiter.valueOf();
+                $4 = __builder.val;
                 __state = 8;
                 return __continue;
             }
         case 8: {
                 __state = 9;
-                return __awaiter = thisShouldBeCalled(5);
+                return thisShouldBeCalled(5);
             }
         case 9: {
-                $5 = __awaiter.valueOf();
+                $5 = __builder.val;
                 if ($5) {
                     __state = 10;
                     return __continue;
                 } else {
                     __state = 12;
-                    return __awaiter = thisShouldnt(6);
+                    return thisShouldnt(6);
                 }
             }
         case 10: {
@@ -86,17 +86,17 @@ var main = function () {
                 break;
             }
         case 12: {
-                $5 = __awaiter.valueOf();
+                $5 = __builder.val;
                 __state = 10;
                 return __continue;
             }
         case 14: {
-                $3 = __awaiter.valueOf();
+                $3 = __builder.val;
                 __state = 5;
                 return __continue;
             }
         case 16: {
-                $1 = __awaiter.valueOf();
+                $1 = __builder.val;
                 __state = 1;
                 return __continue;
             }

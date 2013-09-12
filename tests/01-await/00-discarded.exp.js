@@ -9,12 +9,12 @@ var promiseMe = function(i) {
 };
 
 var main = function (i) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     return __builder.run(function () {
         switch (__state) {
         case 0: {
                 __state = 1;
-                return __awaiter = promiseMe(i);
+                return promiseMe(i);
             }
         case 1: {
                 console.log("exiting");

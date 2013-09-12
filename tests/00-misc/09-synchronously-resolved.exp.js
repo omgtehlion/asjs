@@ -10,14 +10,14 @@ var ticker = function() {
 ticker();
 
 var main = function () {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var promised, start, i;
     return __builder.run(function () {
         switch (__state) {
         case 0: {
                 promised = Vow.fulfill(1);
                 __state = 1;
-                return __awaiter = promised;
+                return promised;
             }
         case 1: {
                 start = ticks;
@@ -28,7 +28,7 @@ var main = function () {
         case 2: {
                 if (i < 1000) {
                     __state = 4;
-                    return __awaiter = promised;
+                    return promised;
                 } else {
                     console.log(ticks - start);
                     running = false;
