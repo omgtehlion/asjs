@@ -78,6 +78,6 @@ var main = function (x) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main();

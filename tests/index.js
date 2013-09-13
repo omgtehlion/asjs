@@ -66,7 +66,7 @@ var runTests = function (rootDir) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 var runSection = function (root, dir) {
     var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
@@ -121,7 +121,7 @@ var runSection = function (root, dir) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 var runTest = function (dir, f) {
     var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
@@ -254,7 +254,7 @@ var runTest = function (dir, f) {
             return __continue;
         }
     });
-}
+};
 
 var execTest = function(f, dir) {
     var promise = Vow.promise();

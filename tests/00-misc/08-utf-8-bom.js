@@ -3,7 +3,7 @@
 ///     exact: true
 /// }
 
-﻿// <-- mind the BOM
+﻿// <-- mind the BOM (should be absent in processed file)
 var main = async(function() {
     var data = 12345;
     console.log("data: " + data);

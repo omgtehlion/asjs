@@ -44,7 +44,7 @@ var main = function () {
             return __continue;
         }
     });
-}
+};
 
 main().then(
     function(data) { console.log("result: " + data); },

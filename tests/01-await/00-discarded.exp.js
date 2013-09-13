@@ -26,6 +26,6 @@ var main = function (i) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main(1);

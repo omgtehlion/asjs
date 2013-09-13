@@ -75,7 +75,7 @@ var main = function (x, y) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main(0, 0).then(function() {
     return main(0, 1);

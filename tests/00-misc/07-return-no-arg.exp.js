@@ -12,7 +12,7 @@ var main = function (i) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 var main2 = function (i) {
     var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
@@ -27,7 +27,7 @@ var main2 = function (i) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main("promised").then(function(x) {
     console.log(typeof(x));

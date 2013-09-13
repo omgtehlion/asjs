@@ -32,7 +32,7 @@ var main = function () {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 main().then(function() {
     main();
 });

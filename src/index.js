@@ -121,7 +121,7 @@ module.exports.processSource = function(content, options) {
         if (lastInd < item.range[0])
             result.push(content.substring(lastInd, item.range[0]));
         result.push(utils.codegen(ast, { parse: utils.parse }));
-        lastInd = item.range[1] + 1;
+        lastInd = item.range[1];
     });
     if (lastInd < content.length)
         result.push(content.substring(lastInd));

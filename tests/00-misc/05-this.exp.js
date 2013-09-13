@@ -24,6 +24,7 @@ var x = {
             throw 'Internal error: encountered wrong state';
         }
     });
-}};
+}
+};
 
 x.main();

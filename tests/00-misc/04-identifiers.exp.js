@@ -34,6 +34,6 @@ var main = function (arg1, arg2) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main("arg1", "arg2");

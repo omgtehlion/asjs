@@ -29,6 +29,6 @@ var main = function () {
     function yyy() {
         return 2;
     }
-}
+};
 
 main();

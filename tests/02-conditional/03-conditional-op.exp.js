@@ -29,7 +29,7 @@ var main = function (x) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main(1).then(function() {
     main(2);

@@ -42,7 +42,7 @@ var main = function (i) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main("promised").then(function(x) {
     console.log(x);
