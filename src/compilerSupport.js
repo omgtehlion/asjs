@@ -34,11 +34,11 @@ var TaskBuilder = function() {
     // fulfillment value of awaited promise
     this.val = undefined;
 
-    this.onThen = function(val) {
+    this.onFulfill = function(val) {
         self.val = val;
         self.moveNext();
     };
-    this.onError = function(err) { self.setException(err); };
+    this.onReject = function(err) { self.setException(err); };
     this.CONT = CONTINUE;
 };
 /* this method is called from generated code */
@@ -58,11 +58,10 @@ TaskBuilder.prototype.ret = function(result) {
 };
 /* private */
 TaskBuilder.prototype.setException = function(ex) {
-    if (this.handlers && this.handlers(ex) === CONTINUE) {
+    if (this.handlers && this.handlers(ex) === CONTINUE)
         this.moveNext();
-        return;
-    }
-    this.promise.reject(ex);
+    else
+        this.promise.reject(ex);
 };
 /* private */
 TaskBuilder.prototype.dispose = function() {
@@ -90,7 +89,7 @@ TaskBuilder.prototype.moveNext = function() {
                 this.val = result.valueOf();
                 result = CONTINUE;
             } else {
-                result.then(this.onThen, this.onError);
+                result.then(this.onFulfill, this.onReject);
                 break;
             }
         } else if (result !== CONTINUE && !this.exited) {
