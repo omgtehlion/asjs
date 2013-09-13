@@ -17,6 +17,10 @@ var scope = require("./scope");
 var chop = require("./chop");
 var generate = require("./generate");
 
+var isAsync = function(node) {
+    return node.type === "CallExpression" && node.callee.type === "Identifier" && node.callee.name === "async";
+};
+
 module.exports.setupOnTheFly = function(tmpExt) {
     // load this file ahead
     require("./compilerSupport");
@@ -48,6 +52,15 @@ var dump = function(name, obj) {
 };
 
 module.exports.processFuncAst = function(ast) {
+    var processFuncAst = module.exports.processFuncAst;
+    // process nested first
+    utils.replace(ast.body, {
+        enter: function(node, parent) {
+            if (isAsync(node))
+                return processFuncAst(node.arguments[0]);
+        }
+    });
+
     try {
         var ws = new utils.WorkingSet(ast);
         dump("ast", ws.ast);
@@ -78,7 +91,7 @@ module.exports.processSource = function(content, options) {
 
     utils.traverse(parsed, {
         enter: function(node, parent) {
-            if (node.type === "CallExpression" && node.callee.name === "async") {
+            if (isAsync(node)) {
                 toReplace.push({ ast: node.arguments[0], range: node.range });
                 return utils.Skip;
             }
@@ -102,7 +115,7 @@ module.exports.processSource = function(content, options) {
 
     var processFuncAst = module.exports.processFuncAst;
     toReplace.forEach(function(item) {
-        var ast = processFuncAst(item.ast, compilerSupport);
+        var ast = processFuncAst(item.ast);
         if (lastInd > item.range[0])
             throw "unexpected index " + item.range[0];
         if (lastInd < item.range[0])
