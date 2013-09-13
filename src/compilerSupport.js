@@ -34,10 +34,7 @@ var TaskBuilder = function() {
     // fulfillment value of awaited promise
     this.val = undefined;
 
-    this.onFulfill = function(val) {
-        self.val = val;
-        self.moveNext();
-    };
+    this.onFulfill = function(val) { self.val = val; self.moveNext(); };
     this.onReject = function(err) { self.setException(err); };
     this.CONT = CONTINUE;
 };
@@ -52,27 +49,29 @@ TaskBuilder.prototype.run = function(machine, handlers) {
 TaskBuilder.prototype.ret = function(result) {
     if (this.exited)
         throw "Internal error: this method already exited";
-    this.exited = true;
-    this.dispose();
     this.promise.fulfill(result);
+    this.dispose();
 };
 /* private */
 TaskBuilder.prototype.setException = function(ex) {
-    if (this.handlers && this.handlers(ex) === CONTINUE)
+    if (this.handlers && this.handlers(ex) === CONTINUE) {
         this.moveNext();
-    else
+    } else {
         this.promise.reject(ex);
+        this.dispose();
+    }
 };
 /* private */
 TaskBuilder.prototype.dispose = function() {
+    this.exited = true;
     this.machine = null;
     this.handlers = null;
     this.val = undefined;
 };
 /* public */
 TaskBuilder.prototype.abort = function(ex) {
-    this.exited = true;
     this.promise.reject(ex);
+    this.dispose();
 };
 /* private */
 TaskBuilder.prototype.moveNext = function() {
@@ -89,6 +88,7 @@ TaskBuilder.prototype.moveNext = function() {
                 this.val = result.valueOf();
                 result = CONTINUE;
             } else {
+                this.val = undefined;
                 result.then(this.onFulfill, this.onReject);
                 break;
             }
