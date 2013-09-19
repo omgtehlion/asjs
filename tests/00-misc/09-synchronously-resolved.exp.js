@@ -1,37 +1,45 @@
 var compilerSupport=require('../../src/compilerSupport');var Vow = require("vow");
+
+ticks = 0;
+var running = true;
+var ticker = function() {
+    ticks++;
+    if (running)
+        process.nextTick(ticker);
+};
+ticker();
+
 var main = function () {
     var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
-    var $1, $2;
-    var i;
+    var promised, start, i;
     return __builder.run(function () {
         switch (__state) {
         case 0: {
-                console.log("entering");
-                i = 0;
+                promised = Vow.fulfill(1);
                 __state = 1;
-                return __continue;
+                return promised;
             }
         case 1: {
-                if (i < 5) {
-                    __state = 3;
-                    return Vow.fulfill("i = " + i);
+                start = ticks;
+                i = 0;
+                __state = 2;
+                return __continue;
+            }
+        case 2: {
+                if (i < 1000) {
+                    __state = 4;
+                    return promised;
                 } else {
-                    console.log("exiting");
+                    console.log(ticks - start);
+                    running = false;
                     __state = -1;
                     __builder.ret();
                     break;
                 }
             }
-        case 3: {
-                $1 = __builder.val;
-                console.log($1);
-                __state = 4;
-                return Vow.fulfill(i + 1);
-            }
         case 4: {
-                $2 = __builder.val;
-                i = $2;
-                __state = 1;
+                i++;
+                __state = 2;
                 return __continue;
             }
         default:

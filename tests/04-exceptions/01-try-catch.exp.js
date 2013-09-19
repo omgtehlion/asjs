@@ -2,7 +2,7 @@ var compilerSupport=require('../../src/compilerSupport');var fs = require("fs");
 require("../include/promisify");
 
 var main = function () {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1, $2;
     var data;
     return __builder.run(function () {
@@ -13,7 +13,7 @@ var main = function () {
             }
         case 1: {
                 __state = 3;
-                return __awaiter = fs.readFile.promise("..", 'utf-8');
+                return fs.readFile.promise("..", 'utf-8');
             }
         case 2: {
                 var ex = __ex;
@@ -23,7 +23,7 @@ var main = function () {
                 break;
             }
         case 3: {
-                $2 = __awaiter.valueOf();
+                $2 = __builder.val;
                 data = $2;
                 __state = 4;
                 return __continue;
@@ -44,7 +44,7 @@ var main = function () {
             return __continue;
         }
     });
-}
+};
 
 main().then(
     function(data) { console.log("result: " + data); },

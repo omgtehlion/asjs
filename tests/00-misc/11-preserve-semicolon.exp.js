@@ -14,10 +14,4 @@ var compilerSupport=require('../../src/compilerSupport');var main = function () 
             throw 'Internal error: encountered wrong state';
         }
     });
-};
-
-main().then(function(x) {
-    console.log("returned: " + x);
-}, function(y) {
-    console.log("failed: " + y);
-});
+};main().then(console.log, console.error);

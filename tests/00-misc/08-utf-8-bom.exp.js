@@ -1,4 +1,5 @@
-var compilerSupport=require('../../src/compilerSupport');var main = function () {
+var compilerSupport=require('../../src/compilerSupport');// <-- mind the BOM (should be absent in processed file)
+var main = function () {
     var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var data;
     return __builder.run(function () {

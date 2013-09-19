@@ -78,9 +78,9 @@ var traverseAlloc = function(ws, node) {
         if (node.isAwaited) {
             var awaitingBlk = traverseAlloc(ws, cfg.get(node.next));
             block.statements.push(tmpl.setState(scope, awaitingBlk.id));
-            block.statements.push(tmpl.returnAwaiter(scope, node.node));
+            block.statements.push(tmpl.return(node.node));
             if (node.tmp)
-                awaitingBlk.statements.unshift(tmpl.awaiterToTmpVar(scope, node.tmp));
+                awaitingBlk.statements.unshift(tmpl.awaitedToTmpVar(scope, node.tmp));
             return block;
         }
 

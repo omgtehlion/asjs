@@ -1,7 +1,7 @@
 ﻿var exec = require("child_process").exec;
 var fs = require("fs");
 var path = require("path");
-var preprocess = require("../src/preprocess");
+var asjs = require("../src");
 var Vow = require("vow");
 
 // *** String tools ***
@@ -49,8 +49,15 @@ var runTests = async(function(rootDir) {
 var runSection = async(function(root, dir) {
     console.log("[ " + dir + " ]");
     dir = path.join(root, dir);
-    var files = fs.readdirSync(dir).filter(function(f) { return /^\d+-/.test(f) && /\.js$/.test(f); });
-    files = files.filter(function(f) { return !/(\.tmp|\.out|\.exp)\.js$/.test(f); });
+    var files = fs.readdirSync(dir).filter(function(f) {
+        if (!/^\d+-/.test(f) || !/\.js$/.test(f))
+            return false;
+        if (/(\.tmp|\.out|\.exp)\.js$/.test(f))
+            return false;
+        if (process.argv.length > 3 && f.lastIndexOf(process.argv[3], 0) !== 0)
+            return false;
+        return true;
+    });
     files.sort();
     for (var i = 0; i < files.length; i++) {
         totals.tests++;
@@ -72,7 +79,7 @@ var runTest = async(function(dir, f) {
         return { status: "corrupt", details: [ ex ] };
     }
     try {
-        var processed = preprocess.doFile(test.src, { csFile: "../../src/compilerSupport" });
+        var processed = asjs.processSource(test.src, { csFile: "../../src/compilerSupport" });
         fs.writeFileSync(fname.replace(/\.js$/, ".tmp.js"), processed, "utf-8");
         try {
             var expected = fs.readFileSync(fname.replace(/\.js$/, ".exp.js"), "utf-8");
@@ -80,6 +87,16 @@ var runTest = async(function(dir, f) {
     } catch (ex) {
         test.status = "throw";
         test.details = [ ex ];
+        return test;
+    }
+
+    if (test.params.exact) {
+        if (expected === processed) {
+            test.status = "ok";
+            fs.unlinkSync(fname.replace(/\.js$/, ".tmp.js"));
+        } else {
+            test.status = "fail";
+        }
         return test;
     }
 

@@ -1,7 +1,7 @@
 var compilerSupport=require('../src/compilerSupport.js');var exec = require("child_process").exec;
 var fs = require("fs");
 var path = require("path");
-var preprocess = require("../src/preprocess");
+var asjs = require("../src");
 var Vow = require("vow");
 
 // *** String tools ***
@@ -27,7 +27,7 @@ var report = function(status) {
 }
 
 var runTests = function (rootDir) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var sections, i;
     return __builder.run(function () {
         switch (__state) {
@@ -48,7 +48,7 @@ var runTests = function (rootDir) {
         case 1: {
                 if (i < sections.length) {
                     __state = 3;
-                    return __awaiter = runSection(rootDir, sections[i]);
+                    return runSection(rootDir, sections[i]);
                 } else {
                     console.log("Totals:");
                     console.log("    " + bold(totals.tests) + " tests" + (", " + color(totals.ok, GREEN) + " ok") + (totals.changed ? ", " + color(totals.changed, YELLOW) + " changed" : "") + (totals.failed ? ", " + color(totals.failed, RED) + " failed" : ""));
@@ -66,10 +66,10 @@ var runTests = function (rootDir) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 var runSection = function (root, dir) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1;
     var files, i, test;
     return __builder.run(function () {
@@ -78,10 +78,13 @@ var runSection = function (root, dir) {
                 console.log("[ " + dir + " ]");
                 dir = path.join(root, dir);
                 files = fs.readdirSync(dir).filter(function (f) {
-                    return /^\d+-/.test(f) && /\.js$/.test(f);
-                });
-                files = files.filter(function (f) {
-                    return !/(\.tmp|\.out|\.exp)\.js$/.test(f);
+                    if (!/^\d+-/.test(f) || !/\.js$/.test(f))
+                        return false;
+                    if (/(\.tmp|\.out|\.exp)\.js$/.test(f))
+                        return false;
+                    if (process.argv.length > 3 && f.lastIndexOf(process.argv[3], 0) !== 0)
+                        return false;
+                    return true;
                 });
                 files.sort();
                 i = 0;
@@ -93,7 +96,7 @@ var runSection = function (root, dir) {
                     totals.tests++;
                     process.stdout.write("    " + pad(files[i].replace(/\.js$/, ""), 25));
                     __state = 3;
-                    return __awaiter = runTest(dir, files[i]);
+                    return runTest(dir, files[i]);
                 } else {
                     console.log();
                     __state = -1;
@@ -102,7 +105,7 @@ var runSection = function (root, dir) {
                 }
             }
         case 3: {
-                $1 = __awaiter.valueOf();
+                $1 = __builder.val;
                 test = $1;
                 process.stdout.write("  " + pad(test.params.description || "", 60));
                 report(test.status || "???");
@@ -118,10 +121,10 @@ var runSection = function (root, dir) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 var runTest = function (dir, f) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1, $2;
     var fname, test, processed, expected, compare, run, err;
     return __builder.run(function () {
@@ -150,7 +153,7 @@ var runTest = function (dir, f) {
                 return __continue;
             }
         case 4: {
-                processed = preprocess.doFile(test.src, { csFile: "../../src/compilerSupport" });
+                processed = asjs.processSource(test.src, { csFile: "../../src/compilerSupport" });
                 fs.writeFileSync(fname.replace(/\.js$/, ".tmp.js"), processed, "utf-8");
                 __state = 6;
                 return __continue;
@@ -179,23 +182,35 @@ var runTest = function (dir, f) {
                 return __continue;
             }
         case 9: {
-                compare = function (expected, got) {
-                    var isRegex = expected instanceof RegExp;
-                    var m = isRegex ? expected.exec(got.trim()) : expected === got.trim();
-                    if (!m) {
+                if (test.params.exact) {
+                    if (expected === processed) {
+                        test.status = "ok";
+                        fs.unlinkSync(fname.replace(/\.js$/, ".tmp.js"));
+                    } else {
                         test.status = "fail";
-                        var exp = isRegex ? "/" + expected.source + "/" : JSON.stringify(expected);
-                        test.details = ["expected: " + exp, "got: " + JSON.stringify(got)];
-                    } else if (isRegex && test.params.assert && !test.params.assert(m)) {
-                        test.status = "fail";
-                        test.details = ["assertion failed, m=" + JSON.stringify(m)];
                     }
-                };
-                __state = 10;
-                return __awaiter = execTest(f, dir);
+                    __state = -1;
+                    __builder.ret(test);
+                    break;
+                } else {
+                    compare = function (expected, got) {
+                        var isRegex = expected instanceof RegExp;
+                        var m = isRegex ? expected.exec(got.trim()) : expected === got.trim();
+                        if (!m) {
+                            test.status = "fail";
+                            var exp = isRegex ? "/" + expected.source + "/" : JSON.stringify(expected);
+                            test.details = ["expected: " + exp, "got: " + JSON.stringify(got)];
+                        } else if (isRegex && test.params.assert && !test.params.assert(m)) {
+                            test.status = "fail";
+                            test.details = ["assertion failed, m=" + JSON.stringify(m)];
+                        }
+                    };
+                    __state = 12;
+                    return execTest(f, dir);
+                }
             }
-        case 10: {
-                $2 = __awaiter.valueOf();
+        case 12: {
+                $2 = __builder.val;
                 run = $2;
                 if ("stdout" in test.params) {
                     compare(test.params.stdout, run.stdout);
@@ -239,7 +254,7 @@ var runTest = function (dir, f) {
             return __continue;
         }
     });
-}
+};
 
 var execTest = function(f, dir) {
     var promise = Vow.promise();

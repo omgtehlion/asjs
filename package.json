@@ -22,7 +22,7 @@
     "engines": {
         "node": "*"
     },
-    "bin": "./index.js",
+    "bin": "./asjs.js",
     "main": "./src/index.js",
     "scripts": {
         "test": "node tests"

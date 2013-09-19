@@ -19,7 +19,6 @@ module.exports = function(workingSet) {
     body.push(tmpl.vars([
         { name: scope.getSpec("builder"), init: tmpl.callNew(taskBld) },
         { name: scope.getSpec("state"), init: tmpl.number(0) },
-        { name: scope.getSpec("awaiter") },
         { name: scope.getSpec("continue"), init: tmpl.member(scope.getSpec("builder"), "CONT") },
         { name: scope.getSpec("ex") }
     ]));

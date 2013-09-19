@@ -1,5 +1,5 @@
 var compilerSupport=require('../../src/compilerSupport');var main = function () {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var data;
     return __builder.run(function () {
         switch (__state) {
@@ -15,7 +15,7 @@ var compilerSupport=require('../../src/compilerSupport');var main = function () 
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main().then(function(x) {
     console.log("returned: " + x);

@@ -253,13 +253,14 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
         case "IfStatement":
             // ---> | if (test) | ---> | consequent......... | ---> | *exitNode | ---> (exit)
             //      | *testNode | ---> | alternate, optional | ---> |           |
-            if (breaksFlow(node.test))
-                throw ARE_YOU_MAD;
             if (asTmp)
                 throw DA_FUK_IS_THAT;
 
             // setup testNode and exitNode
-            var testNode = cfg.connect(cfg.newNode(null), this.currNode);
+            var testNode = cfg.newNode(null);
+            if (breaksFlow(node.test))
+                this.traverseReplacing(node, "test", testNode);
+            cfg.connect(testNode, this.currNode);
             testNode.test = node.test;
             var exitNode = cfg.newNode(null);
 
@@ -371,11 +372,11 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
             return false;
         case "ConditionalExpression":
             // copy-paste from IfStatement
-            if (breaksFlow(node.test))
-                throw ARE_YOU_MAD;
-
             // setup testNode and exitNode
-            var testNode = cfg.connect(cfg.newNode(null), this.currNode);
+            var testNode = cfg.newNode(null);
+            if (breaksFlow(node.test))
+                this.traverseReplacing(node, "test", testNode);
+            cfg.connect(testNode, this.currNode);
             testNode.test = node.test;
             var exitNode = cfg.newNode(null);
 
@@ -509,8 +510,14 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
             this.traverseReplacing(node, "right", thisNode);
             break;
         case "CallExpression":
-            if (breaksFlow(node.callee))
-                throw ARE_YOU_MAD;
+            if (breaksFlow(node.callee)) {
+                if (node.callee.type === "MemberExpression") {
+                    this.traverseReplacing(node.callee, "object", thisNode);
+                    this.traverseReplacing(node.callee, "property", thisNode);
+                } else {
+                    this.traverseReplacing(node, "callee", thisNode);
+                }
+            }
             for (var i = 0; i < node.arguments.length; i++)
                 this.traverseReplacing(node.arguments, i, thisNode);
             break;

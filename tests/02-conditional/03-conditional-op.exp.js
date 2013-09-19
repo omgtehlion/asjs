@@ -1,6 +1,6 @@
 var compilerSupport=require('../../src/compilerSupport');var Vow = require("vow");
 var main = function (x) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1;
     return __builder.run(function () {
         switch (__state) {
@@ -11,7 +11,7 @@ var main = function (x) {
                     return __continue;
                 } else {
                     __state = 4;
-                    return __awaiter = Vow.fulfill(2);
+                    return Vow.fulfill(2);
                 }
             }
         case 2: {
@@ -21,7 +21,7 @@ var main = function (x) {
                 break;
             }
         case 4: {
-                $1 = __awaiter.valueOf();
+                $1 = __builder.val;
                 __state = 2;
                 return __continue;
             }
@@ -29,7 +29,7 @@ var main = function (x) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 main(1).then(function() {
     main(2);

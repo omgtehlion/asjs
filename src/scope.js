@@ -43,7 +43,7 @@ Scope.prototype.process = function(ast, replacing) {
                 var forInit = parent.type === "ForStatement" && node === parent.init;
                 return self.processVars(node.declarations, replacing, forInit);
             }
-        },
+        }
     });
     // find all referenced
     utils.traverse(ast.body, {
@@ -70,7 +70,7 @@ Scope.prototype.process = function(ast, replacing) {
                         remap.push(node);
                 }
             }
-        },
+        }
     });
     // estimate referenced globals
     this.used.forEach(function(name) {

@@ -1,45 +1,132 @@
-﻿var fs = require("fs");
+﻿//
+// https://github.com/omgtehlion/asjs
+//
+// Authors:
+//   Anton A. Drachev (anton@drachev.com)
+//
+// Licensed under the terms of BSD 2-Clause License.
+// See license.txt file for the full text of the license.
+//
+
+var fs = require("fs");
 var path = require("path");
-var preprocess = require("./preprocess");
+
+var tmpl = require("./templates");
+var utils = require("./utils");
+var scope = require("./scope");
+var chop = require("./chop");
+var generate = require("./generate");
+
+var isAsync = function(node) {
+    return node.type === "CallExpression" && node.callee.type === "Identifier" && node.callee.name === "async";
+};
 
 module.exports.setupOnTheFly = function(tmpExt) {
     // load this file ahead
     require("./compilerSupport");
+
+    var processSource = module.exports.processSource;
+    var csFile = path.resolve(__dirname, "compilerSupport.js");
+
     require.extensions[".js"] = function(module, filename) {
         var src = fs.readFileSync(filename, "utf-8");
-        var csFile = path.resolve(__dirname, "compilerSupport.js");
-        var content = preprocess.doFile(src, { csFile: path.relative(path.dirname(filename), csFile) });
+        // fix windows-style path names
+        var relCsFile = path.relative(path.dirname(filename), csFile);
+        if (path.sep !== "/")
+            relCsFile = relCsFile.split(path.sep).join("/");
+        var content = processSource(src, { csFile: relCsFile });
         if (content) {
             if (tmpExt)
-                fs.writeFileSync(filename.replace(/\.\w+$/, tmpExt), content, "utf-8");
+                fs.writeFileSync(filename.replace(/\.[^.]+$/, tmpExt), content, "utf-8");
             return module._compile(content, filename);
         } else {
             return module._compile(src, filename);
         }
     };
+    // setup only once
     module.exports.setupOnTheFly = function() { };
 };
 
-//var originalToString = Function.prototype.toString;
-//Function.prototype.toString = function() {
-//    return originalToString.call(this);
-//};
+var dump = function(name, obj) {
+    //require("fs").writeFileSync(name + ".tmp.json", JSON.stringify(obj, null, 4), "utf-8");
+};
 
-//// I know, I know...
-//var _eval = function(x) { return eval(x); };
+module.exports.processFuncAst = function(ast) {
+    var processFuncAst = module.exports.processFuncAst;
+    // process nested first
+    utils.replace(ast.body, {
+        enter: function(node, parent) {
+            if (isAsync(node))
+                return processFuncAst(node.arguments[0]);
+        }
+    });
 
-//var async = function(func) {
-//    var src = func.toString();
-//    var ast = esprima.parse("(" + src + ")").body[0].expression;
-//    var processed = preprocess.doFunction(ast, "async");
-//    //var params = processed.params.map(function(p) { return p.name; });
-//    //var bodySrc = escodegen.generate(processed.body, { parse: esprima.parse });
-//    //bodySrc = bodySrc.substr(1, bodySrc.length - 2);
-//    //var result = Function.call(global, params);
-//    return "(" + escodegen.generate(processed) + ")";
-//};
+    try {
+        var ws = new utils.WorkingSet(ast);
+        dump("ast", ws.ast);
+        scope.process(ws);
+        dump("scope", ws.scope);
+        dump("ast-post-scope", ws.ast);
+        chop.process(ws);
+        dump("ast-cfg", ws.cfg);
+        dump("flow", ws.blocks);
+        generate(ws);
+        ast = ws.ast;
+    } catch (ex) {
+        ast.body = tmpl.block([tmpl.throw("Cannot compile: " + ex)]);
+    }
+    return ast;
+};
 
-//for (var i in compilerSupport)
-//    async[i] = compilerSupport[i];
+module.exports.processSource = function(content, options) {
+    options = options || {};
 
-//module.exports = eval;
+    // Strip UTF-8 BOM
+    if (content.charAt(0) === "\uFEFF")
+        content = content.slice(1);
+
+    var parsed = utils.parse(content, { raw: true, range: true, ranges: true });
+
+    var toReplace = [];
+
+    utils.traverse(parsed, {
+        enter: function(node, parent) {
+            if (isAsync(node)) {
+                toReplace.push({ ast: node.arguments[0], range: node.range });
+                return utils.Skip;
+            }
+        }
+    });
+
+    if (!toReplace.length)
+        return null;
+
+    var result = [];
+    var lastInd = 0;
+
+    var compilerSupport = options.compilerSupport || "compilerSupport";
+    var csFile = ("csFile" in options) ? options.csFile : "asjs/src/compilerSupport";
+    if (csFile) {
+        result.push(utils.codegen(
+            tmpl.require(compilerSupport, csFile),
+            { format: { indent: { style: '', base: 0 }, compact: true } }
+        ));
+    }
+
+    var processFuncAst = module.exports.processFuncAst;
+    toReplace.forEach(function(item) {
+        var ast = processFuncAst(item.ast);
+        if (lastInd > item.range[0])
+            throw "unexpected index " + item.range[0];
+        if (lastInd < item.range[0])
+            result.push(content.substring(lastInd, item.range[0]));
+        result.push(utils.codegen(ast, { parse: utils.parse }));
+        lastInd = item.range[1];
+    });
+    if (lastInd < content.length)
+        result.push(content.substring(lastInd));
+    return result.join("");
+};
+
+module.exports.processFile = function() {
+};
