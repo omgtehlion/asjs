@@ -5,12 +5,10 @@ var countLines = async(function(path) {
     var total = 0;
     for (var i = 0; i < names.length; i++) {
         var fullname = path + '/' + names[i];
-        var stat = await(fs.stat(fullname));
-        if (stat.isDirectory()) {
+        if (await(fs.stat(fullname)).isDirectory()) {
             total += await(countLines(fullname));
         } else {
-            var content = await(fs.read(fullname, 'utf8'));
-            var count = content.split('\n').length;
+            var count = await(fs.read(fullname, 'utf-8')).split('\n').length;
             console.log(fullname + ': ' + count);
             total += count;
         }

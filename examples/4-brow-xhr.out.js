@@ -1,4 +1,4 @@
-﻿function deferredXhr(url) {
+function deferredXhr(url) {
     var promise = Vow.promise();
     var request = new XMLHttpRequest();
     request.open("GET", url, true);
@@ -12,7 +12,7 @@ var btnXhr = document.getElementById("btn-xhr");
 var text2 = document.getElementById("text-2");
 
 btnXhr.onclick = function (e) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1, $2;
     return __builder.run(function () {
         switch (__state) {
@@ -22,7 +22,7 @@ btnXhr.onclick = function (e) {
             }
         case 1: {
                 __state = 4;
-                return __awaiter = deferredXhr("./README.md");
+                return deferredXhr("./README.md");
             }
         case 2: {
                 var ex = __ex;
@@ -38,7 +38,7 @@ btnXhr.onclick = function (e) {
                 break;
             }
         case 4: {
-                $1 = __awaiter.valueOf();
+                $1 = __builder.val;
                 $2 = $1.responseText;
                 text2.value = $2;
                 __state = 3;
@@ -55,5 +55,5 @@ btnXhr.onclick = function (e) {
             return __continue;
         }
     });
-}
+};
 

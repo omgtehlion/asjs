@@ -1,9 +1,9 @@
-﻿var btnConfirm = document.getElementById("btn-confirm");
+var btnConfirm = document.getElementById("btn-confirm");
 var chkCustomConfirm = document.getElementById("chk-custom-confirm");
 var confirmResult = document.getElementById("confirm-result");
 
 btnConfirm.onclick = function (e) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1;
     var confirm;
     return __builder.run(function () {
@@ -11,10 +11,10 @@ btnConfirm.onclick = function (e) {
         case 0: {
                 confirm = (chkCustomConfirm.checked ? customConfirm : sysConfirm)("Do you really want to do some nasty action?");
                 __state = 1;
-                return __awaiter = confirm;
+                return confirm;
             }
         case 1: {
-                $1 = __awaiter.valueOf();
+                $1 = __builder.val;
                 confirmResult.innerHTML = $1;
                 __state = -1;
                 __builder.ret();
@@ -24,11 +24,11 @@ btnConfirm.onclick = function (e) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 // using default system confirmation:
 var sysConfirm = function (message) {
-    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __awaiter, __continue = __builder.CONT, __ex;
+    var __builder = new compilerSupport.TaskBuilder(), __state = 0, __continue = __builder.CONT, __ex;
     var $1;
     return __builder.run(function () {
         switch (__state) {
@@ -42,7 +42,7 @@ var sysConfirm = function (message) {
             throw 'Internal error: encountered wrong state';
         }
     });
-}
+};
 
 // using custom on-page dialog:
 var customConfirm = function(message) {

@@ -3,8 +3,7 @@ var fs = require("fs");
 require("../tests/include/promisify");
 
 var main = async(function(fileName) {
-    var data = await(fs.readFile.promise(fileName, "utf-8"));
-    var hosts = data.split("\n");
+    var hosts = await(fs.readFile.promise(fileName, "utf-8")).split("\n");
     console.log("Querying " + hosts.length + " domains in parallel...");
     var values = hosts.map(function(host) { return dns.resolve.promise(host); });
     var addrMap = {};

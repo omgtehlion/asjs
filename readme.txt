@@ -39,5 +39,6 @@ node asjs file.js — препроцессит и выполняет на лет
 node asjs --tmp file.js — препроцессит в *.tmp.js и выполняет
 node asjs --preprocess file.js — препроцессит и выводит в stdout
 node asjs --in-place file.js — препроцессит прямо на месте
+node asjs --raw file.js — то же, что и --preprocess, но для браузеров
 
 node asjs на unix-системах можно заменить просто на ./asjs.js
