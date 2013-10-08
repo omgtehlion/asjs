@@ -76,7 +76,18 @@ var traverseAlloc = function(ws, node) {
         }
 
         if (node.isAwaited) {
-            var awaitingBlk = traverseAlloc(ws, cfg.get(node.next));
+            var awaitingBlk;
+            if (node.next === -1) {
+                // await() is the last statement
+                // prepare an exit block
+                awaitingBlk = new SyncBlock(ws.blocks);
+                awaitingBlk.tryHandler = block.tryHandler;
+                awaitingBlk.statements.push(tmpl.setState(scope, -1));
+                awaitingBlk.statements.push(tmpl.fulfill(scope, undefined));
+                awaitingBlk.statements.push(tmpl.break());
+            } else {
+                awaitingBlk = traverseAlloc(ws, cfg.get(node.next));
+            }
             block.statements.push(tmpl.setState(scope, awaitingBlk.id));
             block.statements.push(tmpl.return(node.node));
             if (node.tmp)
