@@ -1,13 +1,19 @@
 {
+    "name": "asjs",
+    "description": "async/await for js",
+    "homepage": "https://github.com/omgtehlion/asjs",
     "author": {
         "name": "Anton Drachev",
         "email": "anton@drachev.com",
         "url": "https://github.com/omgtehlion"
     },
-    "name": "asjs",
-    "description": "async/await for js",
-    "version": "0.0.1",
-    "homepage": "https://github.com/omgtehlion/asjs",
+    "maintainers": [
+        {
+          "name": "Anton Drachev",
+          "email": "anton@drachev.com"
+        }
+    ],
+    "version": "0.1.0",
     "repository": {
         "type": "git",
         "url": "git://github.com/omgtehlion/asjs.git"
@@ -20,7 +26,7 @@
     },
     "optionalDependencies": {},
     "engines": {
-        "node": "*"
+        "node": ">=0.4.0"
     },
     "bin": "./asjs.js",
     "main": "./src/index.js",
