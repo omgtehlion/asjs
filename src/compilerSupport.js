@@ -25,8 +25,6 @@ var TaskBuilder = function() {
     this.handlers = null;
     // a promise, returned by generated function
     this.promise = Vow.promise();
-    // expose a public interface
-    this.promise.abort = function() { self.abort(); };
     // true, when this method finished execution
     this.exited = false;
     // fulfillment value of awaited promise
@@ -63,11 +61,6 @@ TaskBuilder.prototype.dispose = function() {
     this.machine = null;
     this.handlers = null;
     this.val = undefined;
-};
-/* public */
-TaskBuilder.prototype.abort = function(ex) {
-    this.promise.reject(ex);
-    this.dispose();
 };
 /* private */
 TaskBuilder.prototype.onFulfill = function (val) {
