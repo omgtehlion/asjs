@@ -99,3 +99,8 @@ Available flags:
                    this flag used to preprocess code for browsers
    --in-place      Preprocess and overwrite original file, no execution
 ```
+
+### Tests
+
+Tests can be  found in [test/](test/) directory.
+To run tests use `npm test` command.

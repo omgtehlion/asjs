@@ -19,8 +19,6 @@ function isPromise(smth) {
 var CONTINUE = {};
 /* this method is called from generated code */
 var TaskBuilder = function() {
-    var self = this;
-
     // primary state machine
     this.machine = null;
     // exception handler mapper
@@ -34,8 +32,6 @@ var TaskBuilder = function() {
     // fulfillment value of awaited promise
     this.val = undefined;
 
-    this.onFulfill = function(val) { self.val = val; self.moveNext(); };
-    this.onReject = function(err) { self.setException(err); };
     this.CONT = CONTINUE;
 };
 /* this method is called from generated code */
@@ -74,6 +70,13 @@ TaskBuilder.prototype.abort = function(ex) {
     this.dispose();
 };
 /* private */
+TaskBuilder.prototype.onFulfill = function (val) {
+    this.val = val;
+    this.moveNext();
+};
+/* private */
+TaskBuilder.prototype.onReject = TaskBuilder.prototype.setException;
+/* private */
 TaskBuilder.prototype.moveNext = function() {
     var result = CONTINUE;
     while (!this.exited && result === CONTINUE) {
@@ -84,12 +87,14 @@ TaskBuilder.prototype.moveNext = function() {
             break;
         }
         if (isPromise(result)) {
+            // NOTE: Vow-js specific state checking
             if (result._isFulfilled) {
                 this.val = result.valueOf();
                 result = CONTINUE;
             } else {
                 this.val = undefined;
-                result.then(this.onFulfill, this.onReject);
+                // NOTE: Vow-js specific context-passing
+                result.then(this.onFulfill, this.onReject, undefined, this);
                 break;
             }
         } else if (result !== CONTINUE && !this.exited) {
