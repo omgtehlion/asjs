@@ -9,7 +9,6 @@
 //
 
 var Vow = require("vow");
-// TODO: support other promises libs http://wiki.commonjs.org/wiki/Promises
 
 //#begin
 function isPromise(smth) {
@@ -17,6 +16,7 @@ function isPromise(smth) {
 }
 
 var CONTINUE = {};
+
 /* this method is called from generated code */
 var TaskBuilder = function() {
     // primary state machine
@@ -63,12 +63,17 @@ TaskBuilder.prototype.dispose = function() {
     this.val = undefined;
 };
 /* private */
-TaskBuilder.prototype.onFulfill = function (val) {
+TaskBuilder.prototype.onFulfill = function(val) {
     this.val = val;
     this.next();
 };
 /* private */
 TaskBuilder.prototype.onReject = TaskBuilder.prototype.setException;
+/* private */
+TaskBuilder.prototype.setupThen = function(promise) {
+    var self = this;
+    promise.then(function(val) { self.onFulfill(val); }, function(ex) { self.onReject(ex); });
+};
 /* private */
 TaskBuilder.prototype.next = function() {
     var result = CONTINUE;
@@ -79,17 +84,20 @@ TaskBuilder.prototype.next = function() {
             this.setException(ex);
             break;
         }
-        if (isPromise(result)) {
-            // NOTE: Vow-js specific state checking
+        this.val = undefined;
+        if (result instanceof Vow.Promise) {
+            // Vow-js specific state checking
             if (result._isFulfilled) {
                 this.val = result.valueOf();
                 result = CONTINUE;
             } else {
-                this.val = undefined;
-                // NOTE: Vow-js specific context-passing
+                // Vow-js specific context-passing
                 result.then(this.onFulfill, this.onReject, undefined, this);
                 break;
             }
+        } else if (isPromise(result)) {
+            this.setupThen(result);
+            break;
         } else if (result !== CONTINUE && !this.exited) {
             this.setException("Awaited value is not a promise: " + result);
             break;
