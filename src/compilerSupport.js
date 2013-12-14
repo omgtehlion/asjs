@@ -36,7 +36,7 @@ var TaskBuilder = function() {
 TaskBuilder.prototype.run = function(machine, handlers) {
     this.machine = machine;
     this.handlers = handlers;
-    this.moveNext();
+    this.next();
     return this.promise;
 };
 /* this method is called from generated code */
@@ -49,7 +49,7 @@ TaskBuilder.prototype.ret = function(result) {
 /* private */
 TaskBuilder.prototype.setException = function(ex) {
     if (this.handlers && this.handlers(ex) === CONTINUE) {
-        this.moveNext();
+        this.next();
     } else {
         this.promise.reject(ex);
         this.dispose();
@@ -65,12 +65,12 @@ TaskBuilder.prototype.dispose = function() {
 /* private */
 TaskBuilder.prototype.onFulfill = function (val) {
     this.val = val;
-    this.moveNext();
+    this.next();
 };
 /* private */
 TaskBuilder.prototype.onReject = TaskBuilder.prototype.setException;
 /* private */
-TaskBuilder.prototype.moveNext = function() {
+TaskBuilder.prototype.next = function() {
     var result = CONTINUE;
     while (!this.exited && result === CONTINUE) {
         try {
