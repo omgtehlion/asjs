@@ -102,5 +102,5 @@ Available flags:
 
 ### Tests
 
-Tests can be  found in [test/](test/) directory.
+Tests can be  found in [tests/](tests/) directory.
 To run tests use `npm test` command.
