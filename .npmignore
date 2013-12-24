@@ -1,3 +1,4 @@
+benchmarks/
 examples/
 tests/
 runtime.build.js

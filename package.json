@@ -19,7 +19,7 @@
         "url": "git://github.com/omgtehlion/asjs.git"
     },
     "dependencies": {
-        "vow": ">=0.3.12"
+        "vow": "=0.3.12"
     },
     "devDependencies": {
         "vow-fs": ">=0.2.2",
@@ -32,7 +32,8 @@
     "bin": "./asjs.js",
     "main": "./src/index.js",
     "scripts": {
-        "test": "node tests"
+        "test": "node tests",
+        "bench": "node --expose-gc asjs benchmarks"
     },
     "license": {
         "type": "BSD",
