@@ -498,6 +498,9 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
 
     var thisNode = cfg.newNode(node);
     switch (node.type) {
+        case "UnaryExpression":
+            this.traverseReplacing(node, "argument", thisNode);
+            break;
         case "BinaryExpression":
             this.traverseReplacing(node, "left", thisNode);
             this.traverseReplacing(node, "right", thisNode);
