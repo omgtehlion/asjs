@@ -16,6 +16,7 @@ input = input.replace(/\/\*\*/g, "/*!*");
 fs.writeFileSync(__dirname + "/runtime.min.tmp", input, "utf-8");
 
 // oh, crap
+// "java -jar ../tools/yuicompressor-2.4.7.jar --type js --charset utf-8 runtime.min.tmp"
 var child = exec("..\\yui\\yuicompressor-2.4.2.exe --type js --charset utf-8 runtime.min.tmp", { cwd: __dirname }, function(error, stdout, stderr) {
     fs.unlinkSync(__dirname + "/runtime.min.tmp");
     fs.writeFileSync(__dirname + "/runtime.min.js", stdout, "utf-8");

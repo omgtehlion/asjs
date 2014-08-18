@@ -24,7 +24,7 @@ var TaskBuilder = function() {
     // exception handler mapper
     this.handlers = null;
     // a promise, returned by generated function
-    this.promise = Vow.promise();
+    this.deferred = Vow.defer();
     // true, when this method finished execution
     this.exited = false;
     // fulfillment value of awaited promise
@@ -37,13 +37,13 @@ TaskBuilder.prototype.run = function(machine, handlers) {
     this.machine = machine;
     this.handlers = handlers;
     this.next();
-    return this.promise;
+    return this.deferred.promise();
 };
 /* this method is called from generated code */
 TaskBuilder.prototype.ret = function(result) {
     if (this.exited)
         throw "Internal error: this method already exited";
-    this.promise.fulfill(result);
+    this.deferred.resolve(result);
     this.dispose();
 };
 /* private */
@@ -51,7 +51,7 @@ TaskBuilder.prototype.setException = function(ex) {
     if (this.handlers && this.handlers(ex) === CONTINUE) {
         this.next();
     } else {
-        this.promise.reject(ex);
+        this.deferred.reject(ex);
         this.dispose();
     }
 };
@@ -87,7 +87,7 @@ TaskBuilder.prototype.next = function() {
         this.val = undefined;
         if (result instanceof Vow.Promise) {
             // Vow-js specific state checking
-            if (result._isFulfilled) {
+            if (result.isFulfilled()) {
                 this.val = result.valueOf();
                 result = CONTINUE;
             } else {

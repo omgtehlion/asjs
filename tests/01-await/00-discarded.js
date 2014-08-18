@@ -5,12 +5,12 @@
 
 var Vow = require("vow");
 var promiseMe = function(i) {
-    var promise = Vow.promise();
+    var deferred = Vow.defer();
     setTimeout(function() {
         console.log("promised " + i);
-        promise.fulfill("promised " + i);
+        deferred.resolve("promised " + i);
     }, 10);
-    return promise;
+    return deferred .promise();
 };
 
 var main = async(function(i) {

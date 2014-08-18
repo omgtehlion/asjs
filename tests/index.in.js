@@ -141,11 +141,11 @@ var runTest = async(function(dir, f) {
 });
 
 var execTest = function(f, dir) {
-    var promise = Vow.promise();
+    var deferred = Vow.defer();
     var child = exec("node " + f.replace(/\.js$/, ".tmp.js"), { cwd: dir }, function(err, so, se) {
-        promise.fulfill({ error: err, stdout: so, stderr: se });
+        deferred.resolve({ error: err, stdout: so, stderr: se });
     });
-    return promise;
+    return deferred.promise();
 };
 
 var parseTest = function(f) {
