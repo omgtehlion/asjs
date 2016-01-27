@@ -49,7 +49,7 @@ var myFunc = async(function() {
 });
 ```
 
-async and await keywords now look loke ordinary functions. This is still (syntactically) valid JavaScript code.
+async and await keywords now look like ordinary functions. This is still (syntactically) valid JavaScript code.
 
 ### Is this the first implementation?
 
