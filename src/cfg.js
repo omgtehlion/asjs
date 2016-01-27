@@ -162,9 +162,15 @@ CfgBuilder.prototype.traverse = function(node, asTmp) {
 
     switch (node.type) {
         case "BlockStatement":
-            for (var i = 0; i < node.body.length; i++)
-                if (node.body[i] !== null) // skip removed statements
+            for (var i = 0; i < node.body.length; i++) {
+                // skip removed statements
+                if (node.body[i] !== null) {
                     this.traverse(node.body[i]);
+                    // check if we have already exited this block
+                    if (!this.currNode)
+                        break;
+                }
+            }
             return false;
         case "ExpressionStatement":
             this.traverse(node.expression);

@@ -73,7 +73,8 @@ module.exports.processFuncAst = function(ast) {
         generate(ws);
         ast = ws.ast;
     } catch (ex) {
-        ast.body = tmpl.block([tmpl.throw("Cannot compile: " + ex)]);
+        var msg = ex.toString() + (ex.stack || "");
+        ast.body = tmpl.block([tmpl.throw("Cannot compile: " + msg)]);
     }
     return ast;
 };
